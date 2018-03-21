@@ -1,0 +1,2 @@
+# pin_trace_ip
+分析poc时常常要找到控制eip的那条指令，通过pin动态插桩到设置eip的值为0x41414141的指令，例如ret，call 指令
