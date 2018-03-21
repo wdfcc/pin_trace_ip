@@ -49,21 +49,21 @@ VOID PIN_FAST_ANALYSIS_CALL CheckCall2(VOID * ip, CONTEXT * ctxt)
 	
 	switch (*Instruction)
 	{
-	case 0xD0FF:
+	case 0xD0FF:    //call eax
 		if (EAX == CHECKADDRESS)
 		{
 			fprintf(outfile, "call:%p\n", ip);
 			PIN_ExitApplication(0);
 		}
 		break;
-	case 0xD1FF:
+	case 0xD1FF:    //call ecx
 		if (ECX == CHECKADDRESS)
 		{
 			fprintf(outfile, "call:%p\n", ip);
 			PIN_ExitApplication(0);
 		}
 		break;
-	case 0xD2FF:
+	case 0xD2FF:    //call edx
 		if (EDX == CHECKADDRESS)
 		{
 			fprintf(outfile, "call:%p\n", ip);
@@ -71,7 +71,7 @@ VOID PIN_FAST_ANALYSIS_CALL CheckCall2(VOID * ip, CONTEXT * ctxt)
 
 		}
 		break;
-	case 0xD3FF:
+	case 0xD3FF:    //call ebx
 		if (EBX == CHECKADDRESS)
 		{
 			fprintf(outfile, "call:%p\n", ip);
@@ -79,7 +79,7 @@ VOID PIN_FAST_ANALYSIS_CALL CheckCall2(VOID * ip, CONTEXT * ctxt)
 
 		}
 		break;
-	case 0xD4FF:
+	case 0xD4FF:   //call esp
 		if (ESP == CHECKADDRESS)
 		{
 			fprintf(outfile, "call:%p\n", ip);
@@ -87,7 +87,7 @@ VOID PIN_FAST_ANALYSIS_CALL CheckCall2(VOID * ip, CONTEXT * ctxt)
 
 		}
 		break;
-	case 0xD5FF:
+	case 0xD5FF:   //call ebp
 		if (EBP == CHECKADDRESS)
 		{
 			fprintf(outfile, "call:%p\n", ip);
@@ -95,7 +95,7 @@ VOID PIN_FAST_ANALYSIS_CALL CheckCall2(VOID * ip, CONTEXT * ctxt)
 
 		}
 		break;
-	case 0xD6FF:
+	case 0xD6FF:  //call esi
 		if (ESI == CHECKADDRESS)
 		{
 			fprintf(outfile, "call:%p\n", ip);
@@ -103,7 +103,7 @@ VOID PIN_FAST_ANALYSIS_CALL CheckCall2(VOID * ip, CONTEXT * ctxt)
 
 		}
 		break;
-	case 0xD7FF:
+	case 0xD7FF: //call edi
 		if (EDI == CHECKADDRESS)
 		{
 			fprintf(outfile, "call:%p\n", ip);
@@ -149,13 +149,10 @@ VOID InsCallBack(INS ins, VOID *v)
 }
 INT32 Usage()
 {
-	//初始化失败输出这个工具的功能
-	PIN_ERROR("快速查找函数中的溢出点\n"
-		+ KNOB_BASE::StringKnobSummary() + "\n");
-	return -1;
 
+	PIN_ERROR("快速查找函数中的溢出点\n"+ KNOB_BASE::StringKnobSummary() + "\n");
+	return -1;
 }
-//结束回调函数
 VOID Fini(INT32 code, VOID *v)
 {
 	fclose(outfile);
@@ -165,11 +162,8 @@ int main(int argc, char *argv[])
 {
 	if (PIN_Init(argc, argv)) return Usage();
 	outfile = fopen("ip.txt","w");
-
 	INS_AddInstrumentFunction(InsCallBack, 0);
-	//注册结束回调函数
 	PIN_AddFiniFunction(Fini, 0);
-	//启动应用程序
 	PIN_StartProgram();
 	return 0;
 }
